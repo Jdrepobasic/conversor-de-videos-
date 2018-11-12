@@ -1,0 +1,23 @@
+{
+  "name": "conversor-de-videos-",
+  "version": "1.0.0",
+  "description": "Aplicação web para converter vídeos para formatos aceitos pela web, utilizando React.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanDeanDamiani/conversor-de-videos-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JonathanDeanDamiani/conversor-de-videos-/issues"
+  },
+  "homepage": "https://github.com/JonathanDeanDamiani/conversor-de-videos-#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
