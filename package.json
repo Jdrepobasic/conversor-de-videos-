@@ -4,7 +4,7 @@
   "description": "Aplicação web para converter vídeos para formatos aceitos pela web, utilizando React.js",
   "main": "server.js",
   "scripts": {
-    "dev" : "nodemon server.js",
+    "dev": "nodemon server.js",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
@@ -19,7 +19,9 @@
     "url": "https://github.com/JonathanDeanDamiani/conversor-de-videos-/issues"
   },
   "dependencies": {
+    "aws-sdk": "^2.354.0",
     "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "nodemon": "^1.18.6"
   }

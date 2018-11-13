@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const aws = require('aws-sdk');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+aws.config.region = 'sa-east-1';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,13 +24,11 @@ app.post('/api/world', (req, res) => {
 if (process.env.NODE_ENV === 'production') {
     
     app.use(express.static(path.join(__dirname, 'client/build')));
-
     app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
     });
 }
-
-
+app.engine('html', require('ejs').renderFile);
 app.listen(port, ()=> {
     console.log(`Running on port ${port}`);
 });
