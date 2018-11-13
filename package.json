@@ -4,7 +4,9 @@
   "description": "Aplicação web para converter vídeos para formatos aceitos pela web, utilizando React.js",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "dev" : "nodemon server.js",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
