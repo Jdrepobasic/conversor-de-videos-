@@ -4,15 +4,14 @@ const path = require('path');
 const aws = require('aws-sdk');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
-
+const config = require('./config');
 const app = express();
 const port = process.env.PORT || 5000;
 
 
 //Zencoder
 var Zencoder = require('zencoder');
-
-var client = Zencoder();
+var client = new Zencoder(config.zencoder);
 
 // AWS set region São Paulo
 aws.config.region = 'sa-east-1';
@@ -25,30 +24,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(fileUpload());
 
-//pegar erro 404
-app.use(function(req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-if (process.env.NODE_ENV === 'production') {
-    
-    app.use(express.static(path.join(__dirname, 'client/build')));
-    app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-    });
-}
 app.engine('html', require('ejs').renderFile);
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', function(req, res) {
+res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
+// server zencoder para converter video
+app.post('/upload-video', function(req, res) {
+    client.Job.create({
+    test: true,
+    input: '',
+    outputs: [
+        {
+        label: 'mp4',
+        url: config.outputDb + 'output.mp4',
+        public: true,
+        thumbnails: {
+            number: 1,
+            base_url: config.outputDb,
+            filename: 'webm_{{number}}',
+            public: true
+        }
+        }
+    ]
+    }, function(err, data) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+    });
+    res.send(200, {message: 'Success!'});
+});
 
 
 app.listen(port, ()=> {
