@@ -11,7 +11,7 @@ class Home extends Component {
             <div className="Home">
             <section className="container">
                 <div className="row justify-content-center">
-                <Header title="Conversor Jonathan Para Samba"/>
+                <Header title="Converta e assista Jonathan Para Samba"/>
                 </div>
             </section>
             <section className="container">
