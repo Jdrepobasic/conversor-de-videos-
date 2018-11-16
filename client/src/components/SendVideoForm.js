@@ -1,36 +1,12 @@
 import React, { Component } from 'react';
-import { uploadFile } from 'react-s3';
-import config from '../config';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { UploadFileAction } from '../actions/uploadFIleAction'; 
 
-const configS3 = {
-    bucketName: config.s3Bucket,
-    region: 'sa-east-1',
-    accessKeyId: config.key,
-    secretAccessKey: config.secretKey,
-}
 class SendVideoForm extends Component {
-    constructor () {
-        super();
-        this.state = {
-            file: '',
-            loaded: 0
-        };
-    }
     handleFileUpload = (e) => {
-        console.log(e.target.files[0]);
-        uploadFile(e.target.files[0], configS3)
-        .then((data)=>{
-            var videoName = data.key;
-            axios.post('/converter', { videoName }) 
-            .then((result) => {
-                //console.log(this.state.fileInput);
-            });
-        })
-        .catch( (err) => {
-            alert(err);
-        })
+        this.props.UploadFile(e);
     }
+
     render() {
         return(
         <div className="container">
@@ -40,4 +16,15 @@ class SendVideoForm extends Component {
     }
 }
 
-export default SendVideoForm;
+const mapStateToProps = (state) => {
+    return{
+        file: state.file
+    }
+}
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        UploadFile: (file) => {dispatch(UploadFileAction(file))}
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SendVideoForm);

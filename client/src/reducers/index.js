@@ -1,0 +1,1 @@
+export {default as fileReducer} from "./fileReducer";
