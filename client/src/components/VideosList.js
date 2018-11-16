@@ -1,7 +1,11 @@
 import React from 'react';
 
 function VideosList () {
-    return <div>{}</div>;
+    return (
+    <ul>
+
+    </ul>
+    );
 }
 
 export default VideosList;

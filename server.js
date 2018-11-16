@@ -1,62 +1,71 @@
 const express = require('express');
+const app = express();
+const AWS = require('aws-sdk');
+const bluebird = require('bluebird');
 const bodyParser = require('body-parser');
 const path = require('path');
-const aws = require('aws-sdk');
-const cors = require('cors');
-const fileUpload = require('express-fileupload');
 const config = require('./config');
-const app = express();
+
+//dotenv
+require('dotenv').config();
+
 const port = process.env.PORT || 5000;
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// AWS configurações
+AWS.config.region = 'sa-east-1';
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
+AWS.config.setPromisesDependency(bluebird);
+
+// create S3 instance
+const s3 = new AWS.S3();
 
 //Zencoder
 var Zencoder = require('zencoder');
 var client = new Zencoder(config.zencoder);
 
-// AWS set region São Paulo
-aws.config.region = 'sa-east-1';
-
 //body parser para arquivos json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// para upload do arquivo
-app.use(cors());
-app.use(fileUpload());
-
-app.engine('html', require('ejs').renderFile);
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('*', function(req, res) {
-res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+app.use((request, response, next) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
 });
 
-// server zencoder para converter video
-app.post('/upload-video', function(req, res) {
+// //conversão do video
+app.route('/converter').post((req,res) =>{
+    const { body } = req;
+    var videoFileName = body.videoName;
+    console.log(config.baseURL + videoFileName);
     client.Job.create({
-    test: true,
-    input: '',
-    outputs: [
-        {
-        label: 'mp4',
-        url: config.outputDb + 'output.mp4',
-        public: true,
-        thumbnails: {
-            number: 1,
-            base_url: config.outputDb,
-            filename: 'webm_{{number}}',
-            public: true
-        }
-        }
-    ]
-    }, function(err, data) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-    });
-    res.send(200, {message: 'Success!'});
+        input:config.baseURL + videoFileName,
+        outputs: [
+            {   
+                format: 'mp4',
+                label: videoFileName,
+                url: config.outputDb + videoFileName,
+                public: true,
+                thumbnails: {
+                    number: 1,
+                    base_url: config.outputDb + '/thumbs' + videoFileName,
+                    filename: videoFileName,
+                    public: true
+                }
+            }
+        ]
+        }, function(err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        });
+        res.status(200).send({message: 'Success!'});
 });
-
 
 app.listen(port, ()=> {
     console.log(`Running on port ${port}`);
