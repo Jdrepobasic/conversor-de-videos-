@@ -7,7 +7,7 @@ class VideoPage extends Component {
     }
     componentDidMount(){
     let id = this.props.match.params.video_id;
-    let link = "https://s3-sa-east-1.amazonaws.com/convertervideosdb/videos/" + id;
+    let link = "https://s3.amazonaws.com/videosconverterdb/videos/" + id;
         this.setState({
             id:link
         })

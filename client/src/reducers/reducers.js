@@ -1,27 +1,33 @@
 const initState={
-    status:''
+    status:'',
+    fileName: ''
 }
 const fileReducer = (state = initState, action) =>{
     switch (action.type){
         case'UPLOAD_FILE':
             return{...state,
-                status:'enviando'
+                status:'enviando',
+                fileName: action.file 
             }
             case'CONVERT_FILE':
             return{...state,
-                status:'convertendo'
+                status:'convertendo',
+                fileName: action.file   
             }
             case'FINALIZADO':
             return{...state,
-                status:'finalizado'
+                status:'finalizado',
+                fileName: ''  
             }
             case'ERRO':
             return{...state,
-                status:'ocorreu algum erro'
+                status:'ocorreu algum erro',
+                fileName: '' 
             }
             case'LIMPAR':
             return{...state,
-                status:''
+                status:'',
+                fileName: ''
             }
         default:
             return state;

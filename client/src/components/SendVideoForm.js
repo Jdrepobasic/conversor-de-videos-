@@ -3,31 +3,32 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { UploadFileAction, ConvertingFile, Finalized, ErrorUpload, Clean } from '../actions/actions'; 
 import { uploadFile } from 'react-s3';
-import config from './config';
+import config from '../config';
 import axios from 'axios';
 
 
 const configS3 = {
     bucketName: config.s3Bucket,
-    region: 'sa-east-1',
-    accessKeyId: config.key,
-    secretAccessKey: config.secretKey,
+    region: 'us-east-1',
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
 }
 
 class SendVideoForm extends Component {
-
     handleFileUpload = (file) => {
-        console.log(file.target.files[0])
-        this.props.UploadFile();
+        
+        console.log(file.target.files[0]);
+        console.log(file.target.files[0].name);
+        this.props.UploadFile(file.target.files[0].name);
+        console.log(this.props.fileName)
         uploadFile(file.target.files[0], configS3)
             .then((data)=>{
-                console.log(data.key)
-                this.props.Finalized();
-                console.log(this.props.status);
+                this.props.ConvertFile(data.key);
+                console.log(this.props.fileName);
                 var videoName = data.key;
                 axios.post('/converter', { videoName })
-                .then((data)=>{
-                    console.log(data);
+                .then(res => {
+                    console.log(res.data);
                 })
                 .catch((err)=>{
                     console.log(err);
@@ -37,18 +38,10 @@ class SendVideoForm extends Component {
                 console.log(err);
             })
     }
-    componentWillUpdate(nextProps, nextState){
-
-    }
-
     render() {
         return(
         <div className="container">
             <input id="fileInput" className="form-control" type="file" onChange={this.handleFileUpload}/>
-            <div>
-                <li id="status">{this.props.status}</li>
-
-            </div>
         </div>
         
         );
@@ -57,14 +50,14 @@ class SendVideoForm extends Component {
 
 const mapStateToProps = (state) => {
     return{
-        file: state.file,
+        fileName: state.fileName,
         status: state.status
     }
 }
 const mapDispatchToProps = (dispatch) =>{
     return{
-        UploadFile: () => {dispatch(UploadFileAction())},
-        ConvertFile: () => {dispatch(ConvertingFile())},
+        UploadFile: (file) => {dispatch(UploadFileAction(file))},
+        ConvertFile: (file) => {dispatch(ConvertingFile(file))},
         Finalized: () => {dispatch(Finalized())},
         Error: () => {dispatch(ErrorUpload())},
         Clean: () => {dispatch(Clean())},

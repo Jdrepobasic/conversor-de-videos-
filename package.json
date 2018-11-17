@@ -27,6 +27,7 @@
     "express": "^4.16.4",
     "file-type": "^10.4.0",
     "nodemon": "^1.18.6",
+    "socket.io": "^2.1.1",
     "zencoder": "^2.0.1"
   }
 }
