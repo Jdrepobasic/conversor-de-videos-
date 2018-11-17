@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { UploadFileAction } from '../actions/uploadFIleAction'; 
+import { UploadFileAction } from '../actions/actions'; 
 
 class SendVideoForm extends Component {
     handleFileUpload = (e) => {
@@ -11,8 +11,12 @@ class SendVideoForm extends Component {
         return(
         <div className="container">
             <input id="fileInput" className="form-control" type="file" onChange={this.handleFileUpload}/>
+            <div id="listVideos">
+            
+            </div>
         </div>
-        )
+        
+        );
     }
 }
 

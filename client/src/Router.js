@@ -12,7 +12,7 @@ class Router extends Component {
         <BrowserRouter>
             <div className="app">
                 <Route exact path="/" component={Home}/>
-                <Route path="/video" component={VideoPage}/>
+                <Route path="/videos/:video_id" component={VideoPage}/>
             </div>
         </BrowserRouter>
         );

@@ -67,6 +67,23 @@ app.route('/converter').post((req,res) =>{
         res.status(200).send({message: 'Success!'});
 });
 
+//buscando lista do s3
+app.route('/list').get((req,res) =>{
+    var params = {
+        Bucket:config.s3Bucket,
+        Delimiter: '/',
+        Prefix: 'videos/'
+    };
+    s3.listObjectsV2(params, function(err, data) {
+        if(err)  {console.log(err, err.stack);        
+        }
+        else{
+            console.log(data); 
+            res.send(JSON.stringify(data.Contents))
+        }            
+    });
+});
+
 app.listen(port, ()=> {
     console.log(`Running on port ${port}`);
 });

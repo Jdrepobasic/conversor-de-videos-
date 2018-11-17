@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 
 import Header from '../components/Header';
 import SendVideoForm from '../components/SendVideoForm';
-import VideosList from '../components/VideosList';
+import VideoList from '../components/VideosList';
 
 class Home extends Component {
-
     render() {
         return (
             <div className="Home">
@@ -21,12 +20,13 @@ class Home extends Component {
             </section>
             <section className="container">
                 <div className="row justify-content-center">
-                <VideosList/>
+                    <VideoList/>
                 </div>
             </section>
-            </div>
+            </div>            
         );
     }
 }
+
 
 export default Home;
