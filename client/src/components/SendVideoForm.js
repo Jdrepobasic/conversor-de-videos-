@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { UploadFileAction, ConvertingFile, Finalized, ErrorUpload, Clean } from '../actions/actions'; 
 import { uploadFile } from 'react-s3';
-import config from '../config';
+import config from './config';
 import axios from 'axios';
 
 
