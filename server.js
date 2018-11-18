@@ -50,9 +50,9 @@ app.route('/converter').post((req,res) =>{
     client.Job.create({
         input:config.baseURL + videoFileName,
         outputs: [
-            {   
+            {    
                 label: videoFileName,
-                url: config.outputDb + 'videobg.mp4',
+                url: config.outputDb + videoFileName,
                 public: true,
                 rss: true
             }
