@@ -6,12 +6,15 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const config = require('./config');
 const readline = require('readline');
+
 //dotenv
 require('dotenv').config();
 
 const port = process.env.PORT || 5000;
 
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.engine('html', require('ejs').renderFile);
 
 // AWS configurações
 AWS.config.region = 'us-east-1';
