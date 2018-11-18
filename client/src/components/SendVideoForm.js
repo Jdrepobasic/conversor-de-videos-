@@ -6,42 +6,48 @@ import { uploadFile } from 'react-s3';
 import config from '../config';
 import axios from 'axios';
 
-
+// configuração AWS para fazer upload do video, é preciso passar as keys corretas antes de publicar no Heroku
 const configS3 = {
     bucketName: config.s3Bucket,
     region: 'us-east-1',
-    accessKeyId: config.key1,
-    secretAccessKey: config.key2,
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
 }
 
 class SendVideoForm extends Component {
+    //função de upload do video
     handleFileUpload = (file) => {
-        
-        console.log(file.target.files[0]);
-        console.log(file.target.files[0].name);
+        //muda state para nome do arquivo e colaca status de enviando
         this.props.UploadFile(file.target.files[0].name);
-        console.log(this.props.fileName)
         uploadFile(file.target.files[0], configS3)
             .then((data)=>{
+                //atualiza status para convertendo
                 this.props.ConvertFile(data.key);
                 console.log(this.props.fileName);
                 var videoName = data.key;
                 axios.post('/converter', { videoName })
                 .then(res => {
-                    console.log(res.data);
-                })
-                .catch((err)=>{
-                    console.log(err);
+                    console.log(res);
                 })
             })
             .catch( (err) => {
-                console.log(err);
+                this.props.Error();
             })
     }
     render() {
+        // atualiza mensagem de error
+        var errorMessage = () =>{
+            if(this.props.status === "error"){
+                return "Alguma coisa está errada tente novamente";
+            }
+        }
         return(
         <div className="container">
-            <input id="fileInput" className="form-control input-send-file" type="file" onChange={this.handleFileUpload}/>
+            <label className="label-send-file">Insira um arquivo de vídeo abaixo</label>
+            <input id="fileInput" className="form-control input-send-file" type="file" accept="video/*" onChange={this.handleFileUpload}/>
+            <p className="error-class">
+                {errorMessage()}
+            </p>
         </div>
         
         );

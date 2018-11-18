@@ -22,7 +22,6 @@ li {
 
 h1 {
   text-transform: uppercase;
-  margin-bottom: 40px;
   font-size: 3rem;
   color: #1613bd;
   text-align: center;
@@ -62,7 +61,7 @@ h1 {
   margin-bottom: 5px;
 }
 .video-list__item {
-  color: red;
+  color: blueviolet;
   font-size: 22px;
 }
 .video-list__item:hover {
@@ -72,6 +71,21 @@ h1 {
 .video-display {
   width: 100%;
   height: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.label-send-file {
+  margin: 20px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.error-class {
+  color: red;
+  animation: blinking 1s linear infinite;
+  text-align: center;
+  margin: 0 auto;
 }
 
 @keyframes blinking {

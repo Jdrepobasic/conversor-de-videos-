@@ -14,6 +14,7 @@ class VideoList extends Component {
             fileItems: []
         };
     }
+    //carrega lista do servidor
     componentDidMount(){
         axios.get('/list')
         .then(res => {
@@ -23,22 +24,26 @@ class VideoList extends Component {
         })
         
     }
+    //pausa atualização automatica
     componentWillUnmount(){
-        clearTimeout(this.handleList());
+        clearTimeout(this.handleList);
     }
+    // limpa todos os status
     handleClick = () => {
         this.props.Clean();
     }
+    //muda o nome do arquivo buscado limpando o mesmo.
     handleData = (e) => {
         var getCleanName = e.replace('videos/','');
         return getCleanName;
     }
+    //remove retorno indesejado
     removeFirstObject = (e) =>{
         var removeFirst = e.shift();
         return removeFirst;
     }
+    //atualiza lista
     handleList = () => {
-        console.log("aqui");
         axios.get('/list')
             .then(res => {
                     this.setState({
@@ -49,6 +54,7 @@ class VideoList extends Component {
     }
 
     render() {
+        // rederizando lista
         const { fileItems } = this.state;
             this.removeFirstObject(fileItems);
             var videoListArray = fileItems.length ? (
@@ -68,9 +74,14 @@ class VideoList extends Component {
             <div
             />
         )
+        //mostra status de conversão do video
         if(this.props.status ==='convertendo' ){
             setTimeout(this.handleList, 5000);
         } 
+        //pausa atualização automatica ao finalizar processo
+        if(this.props.status ==='finalizado'){
+            clearTimeout(this.handleList);
+        }
         return (
         <ul className="video-list">
             <li className="video-list__pre-item">{this.props.fileName}</li>

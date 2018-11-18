@@ -33,7 +33,7 @@ app.use(cors());
 var Zencoder = require('zencoder');
 var client = new Zencoder(config.zencoder);
 
-//body parser para arquivos json
+//body parser para arquivos json e controles
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((request, response, next) => {
@@ -42,7 +42,7 @@ app.use((request, response, next) => {
     next();
 });
 
-// //conversão do video
+//conversão do video, faz request do client para buscar nome do video.
 app.route('/converter').post((req,res) =>{
     const { body } = req;
     var videoFileName = body.videoName;
@@ -64,6 +64,7 @@ app.route('/converter').post((req,res) =>{
             }
             console.log('Job created!\nJob ID: ' + data.id);
         });
+        res.send({message:"successe"});
 });
 
 //buscando lista do s3
@@ -73,11 +74,11 @@ app.route('/list').get((req,res) =>{
         Delimiter: '/',
         Prefix: 'videos/'
     };
+    //retorna lista de videos da aws s3
     s3.listObjectsV2(params, function(err, data) {
-        if(err)  {console.log(err, err.stack);        
+        if(err)  {console.log(err, err.stack);
         }
         else{
-            //console.log(data); 
             res.send(JSON.stringify(data.Contents))
         }            
     });
