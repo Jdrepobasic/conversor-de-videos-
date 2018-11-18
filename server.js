@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const config = require('./config');
 const readline = require('readline');
+var cors = require('cors')
+
 
 //dotenv
 require('dotenv').config();
@@ -26,6 +28,8 @@ AWS.config.setPromisesDependency(bluebird);
 
 // create S3 instance
 const s3 = new AWS.S3();
+
+app.use(cors())
 
 //Zencoder
 var Zencoder = require('zencoder');
