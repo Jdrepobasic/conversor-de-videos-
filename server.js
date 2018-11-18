@@ -53,13 +53,7 @@ app.route('/converter').post((req,res) =>{
                 label: videoFileName,
                 url: config.outputDb + 'videobg.mp4',
                 public: true,
-                rss: true,
-                thumbnails: {
-                    number: 1,
-                    base_url: config.outputDb + '/thumbs' + videoFileName,
-                    filename: videoFileName,
-                    public: true
-                }
+                rss: true
             }
         ]
         },function(err, data) {

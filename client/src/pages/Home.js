@@ -7,23 +7,19 @@ import VideoList from '../components/VideosList';
 class Home extends Component {
     render() {
         return (
-            <div className="Home">
             <section className="container">
-                <div className="row justify-content-center">
-                <Header title="Converta e assista Jonathan Para Samba"/>
+                <div className="home">
+                    <div className="row justify-content-center">
+                    <Header title="converta e assista"/>
+                    </div>
+                    <div className="row justify-content-center">
+                        <SendVideoForm/>
+                    </div>
+                    <div className="row justify-content-center">
+                        <VideoList/>
+                    </div>
                 </div>
-            </section>
-            <section className="container">
-                <div className="row justify-content-center">
-                    <SendVideoForm/>
-                </div>
-            </section>
-            <section className="container">
-                <div className="row justify-content-center">
-                    <VideoList/>
-                </div>
-            </section>
-            </div>            
+            </section>           
         );
     }
 }

@@ -11,8 +11,7 @@ class VideoList extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            fileItems: [],
-            videoName:[]
+            fileItems: []
         };
     }
     componentDidMount(){
@@ -21,17 +20,14 @@ class VideoList extends Component {
                 this.setState({
                 fileItems: res.data
             })
-            
         })
         
     }
+    componentWillUnmount(){
+        clearTimeout(this.handleList());
+    }
     handleClick = () => {
-        axios.get('/list')
-        .then(res => {
-                this.setState({
-                fileItems: res.data
-            })
-        })
+        this.props.Clean();
     }
     handleData = (e) => {
         var getCleanName = e.replace('videos/','');
@@ -51,13 +47,17 @@ class VideoList extends Component {
             })
             setTimeout(this.handleList, 5000);
     }
+
     render() {
         const { fileItems } = this.state;
             this.removeFirstObject(fileItems);
             var videoListArray = fileItems.length ? (
                 fileItems.map((item, i) => {
+                if(this.handleData(item.Key) === this.props.fileName && this.props.status === 'convertendo'){
+                    this.props.Finalized()
+                }
                 return(
-                    <Link to={'videos/' + this.handleData(item.Key)} key={i}>
+                    <Link onClick={this.props.Clean} to={'videos/' + this.handleData(item.Key)} key={i}>
                         <VideoListItem
                             name = {this.handleData(item.Key)}       
                         />
@@ -65,17 +65,16 @@ class VideoList extends Component {
                 )
             })
         ) : (
-            <VideoListItem
-            name = "nenhum item na lista"
+            <div
             />
         )
-        
         if(this.props.status ==='convertendo' ){
             setTimeout(this.handleList, 5000);
-        }
+        } 
         return (
-        <ul>
-            <li><h2>{this.props.fileName}</h2> <span>{this.props.status}</span></li>
+        <ul className="video-list">
+            <li className="video-list__pre-item">{this.props.fileName}</li>
+            <span className="notifications">{this.props.status}</span>
             {videoListArray}
         </ul>
     );

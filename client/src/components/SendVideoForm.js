@@ -41,7 +41,7 @@ class SendVideoForm extends Component {
     render() {
         return(
         <div className="container">
-            <input id="fileInput" className="form-control" type="file" onChange={this.handleFileUpload}/>
+            <input id="fileInput" className="form-control input-send-file" type="file" onChange={this.handleFileUpload}/>
         </div>
         
         );

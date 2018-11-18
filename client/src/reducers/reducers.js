@@ -21,7 +21,7 @@ const fileReducer = (state = initState, action) =>{
             }
             case'ERRO':
             return{...state,
-                status:'ocorreu algum erro',
+                status:'ocorreu algum erro, tente novamente',
                 fileName: '' 
             }
             case'LIMPAR':

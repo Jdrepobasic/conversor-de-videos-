@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Header from '../components/Header';
 
 class VideoPage extends Component {
     state ={
@@ -14,11 +14,16 @@ class VideoPage extends Component {
     }
     render() {
     return (
-        <div>
-            <video widtth="800" height="600" controls controlsList="nodownload" >
-                <source src={this.state.id} type="video/mp4"/>
-            </video>
-        </div>
+        <section>
+            <div className="container">
+                <div className="row">
+                    <Header title="assista"/>
+                    <video className="video-display" controls controlsList="nodownload" >
+                        <source src={this.state.id} type="video/mp4"/>
+                    </video>
+                </div>
+            </div>
+        </section>
     );
     }
 }
