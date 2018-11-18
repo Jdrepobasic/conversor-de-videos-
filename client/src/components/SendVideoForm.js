@@ -10,8 +10,8 @@ import axios from 'axios';
 const configS3 = {
     bucketName: config.s3Bucket,
     region: 'us-east-1',
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 }
 
 class SendVideoForm extends Component {
