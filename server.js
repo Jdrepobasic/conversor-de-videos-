@@ -5,7 +5,6 @@ const bluebird = require('bluebird');
 const bodyParser = require('body-parser');
 const path = require('path');
 const config = require('./config');
-const readline = require('readline');
 var cors = require('cors')
 
 
@@ -16,7 +15,6 @@ const port = process.env.PORT || 5000;
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.engine('html', require('ejs').renderFile);
 
 // AWS configurações
 AWS.config.region = 'us-east-1';
@@ -29,7 +27,7 @@ AWS.config.setPromisesDependency(bluebird);
 // create S3 instance
 const s3 = new AWS.S3();
 
-app.use(cors())
+app.use(cors());
 
 //Zencoder
 var Zencoder = require('zencoder');
@@ -46,10 +44,6 @@ app.use((request, response, next) => {
 
 // //conversão do video
 app.route('/converter').post((req,res) =>{
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
     const { body } = req;
     var videoFileName = body.videoName;
     console.log(config.baseURL + videoFileName);
@@ -88,6 +82,12 @@ app.route('/list').get((req,res) =>{
         }            
     });
 });
+
+app.engine('html', require('ejs').renderFile);
+app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 app.listen(port, ()=> {
     console.log(`Running on port ${port}`);
 });
